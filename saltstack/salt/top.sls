@@ -1,5 +1,5 @@
 base:
-  'master*':
+  'saltmaster*':
     - master
   'minion*':
     - minion

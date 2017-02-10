@@ -12,6 +12,7 @@ salt-master-packages:
 /etc/salt/pki/master/ssh/salt-ssh.rsa.pub:
   file.managed:
     - source: salt://master/files/salt-ssh.rsa.pub
+    - mode: 600
     - makedirs: True
 
 

@@ -24,7 +24,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master_config.vm.provision :salt do |salt|
       salt.master_key = "saltstack/keys/master.pem"
       salt.master_pub = "saltstack/keys/master.pub"
-      salt.seed_master = {"minion1.local" => "saltstack/keys/minion1.pub", "saltmaster.local" => "saltstack/keys/master.pub",}
+      salt.seed_master = {"minion1.local" => "saltstack/keys/minion1.pub", "saltmaster.local" => "saltstack/keys/master_minion.pub",}
       salt.install_master = true
       salt.run_highstate = true
     end
