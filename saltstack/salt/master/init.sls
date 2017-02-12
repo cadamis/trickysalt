@@ -15,5 +15,10 @@ salt-master-packages:
     - source: salt://master/files/salt-ssh.rsa.pub
     - makedirs: True
 
+/etc/salt/roster:
+  file.managed:
+    - source: salt://master/files/roster
+    - makedirs: True
+
 
 

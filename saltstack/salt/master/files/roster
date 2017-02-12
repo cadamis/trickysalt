@@ -1,0 +1,4 @@
+saltmaster:
+  host: 192.168.10.10
+minion1:
+  host: 192.168.10.11
