@@ -1,12 +1,14 @@
+salt-minion-packages:
+  pkg.installed:
+    - names:
+      - python-pyinotify
+
 super_important_file:
   file.managed:
-    - name: /opt/important.txt
+    - name: /opt/myapp/important.txt
     - source: salt://minion/files/important.txt
+    - makedirs: True
 
-master_key_present:
-  ssh_auth.present:
-    - user: root
-    - source: salt://master/files/salt-ssh.rsa.pub
 
 
 

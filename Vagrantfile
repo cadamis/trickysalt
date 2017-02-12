@@ -13,7 +13,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # configure the master
   config.vm.define :master do |master_config|
     master_config.vm.box = "bento/ubuntu-16.04"
-    master_config.vm.host_name = 'saltmaster.local'
+    master_config.vm.host_name = 'saltmaster'
     master_config.vm.network "private_network", ip: "192.168.10.10"
     master_config.vm.synced_folder "saltstack/salt/", "/srv/salt"
     master_config.vm.synced_folder "saltstack/pillar/", "/srv/pillar"
@@ -24,23 +24,28 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master_config.vm.provision :salt do |salt|
       salt.master_key = "saltstack/keys/master.pem"
       salt.master_pub = "saltstack/keys/master.pub"
-      salt.seed_master = {"minion1.local" => "saltstack/keys/minion1.pub", "saltmaster.local" => "saltstack/keys/master_minion.pub",}
+      salt.minion_key = "saltstack/keys/master_minion.pem"
+      salt.minion_pub = "saltstack/keys/master_minion.pub"
+      salt.seed_master = {"minion1" => "saltstack/keys/minion1.pub", "saltmaster" => "saltstack/keys/master_minion.pub",}
       salt.install_master = true
       salt.run_highstate = true
+      # the highstate appears to run before master is configured, do this at the end
+     master_config.vm.provision "shell",
+       inline: "sudo salt-call state.highstate"
     end
   end
 
   # configure a salt minion
   config.vm.define :minion1 do |minion_config|
     minion_config.vm.box = "bento/ubuntu-16.04"
-    minion_config.vm.host_name = 'minion1.local'
+    minion_config.vm.host_name = 'minion1'
     minion_config.vm.network "private_network", ip: "192.168.10.11"
     minion_config.vm.synced_folder "saltstack/minion.d/", "/etc/salt/minion.d"
 
     minion_config.vm.provision :salt do |salt|
       salt.minion_key = "saltstack/keys/minion1.pem"
       salt.minion_pub = "saltstack/keys/minion1.pub"
-      # salt.run_highstate = true
+      salt.run_highstate = true
     end
   end
 end
